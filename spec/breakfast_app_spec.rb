@@ -1,34 +1,29 @@
 require 'spec_helper'
 require 'breakfast_app'
+require 'json'
 
 describe 'Breakfast App' do
   let(:price_list_json) do
-    <<-JSON
     [
       { "id": "flat-white", name: "Flat White", price: 3.0 },
       { "id": "espresso", name: "Espresso", price: 2.0 },
       { "id": "bacon-egg-roll", name: "Bacon & Egg Roll", price: 5.0 },
       { "id": "bbq-sauce", name: "BBQ Sauce", price: 0.0 },
-    ]
-    JSON
+    ].to_json
   end
 
   let(:orders_json) do
-    <<-JSON
     [
       { "name": "dave", "money": 10.0, "items": ["flat-white", "bacon-egg-roll", "bbq-sauce"] },
       { "name": "jenny", "money": 5.0, "items": ["espresso"] }
-    ]
-    JSON
+    ].to_json
   end
 
   let(:result_json) do
-    <<-JSON
     [
       { "name": "dave", change: 2.0 },
       { "name": "jenny", change: 3.0 },
-    ]
-    JSON
+    ].to_json
   end
 
   before do
