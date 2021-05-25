@@ -1,17 +1,27 @@
 
 class BreakfastApp
   def self.call(price_list_json, orders_json)
+    return [{}] if orders_json.empty?
+
     orders = JSON.load(orders_json)
     price_list = JSON.load(price_list_json)
-    a = orders.map do  |order|
+    orders.map do  |order|
       total_items_price = calculate_order_total(price_list, order['items'])
-      {
-        'name': order['name'],
-        'change': order['money'] - total_items_price
-      }
-    end
-
-    a.to_json
+      if total_items_price <= order['money']
+        {
+          'name': order['name'],
+          'change': order['money'] - total_items_price,
+          'status': 'success'
+        }
+      else
+        {
+          'name': order['name'],
+          'change': order['money'],
+          'status': 'fail',
+          'error': 'Insufficient Money.'
+        }
+      end
+    end.to_json
   end
 
   private

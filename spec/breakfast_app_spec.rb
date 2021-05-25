@@ -15,14 +15,16 @@ describe 'Breakfast App' do
   let(:orders_json) do
     [
       { "name": "dave", "money": 10.0, "items": ["flat-white", "bacon-egg-roll", "bbq-sauce"] },
-      { "name": "jenny", "money": 5.0, "items": ["espresso"] }
+      { "name": "jenny", "money": 5.0, "items": ["espresso"] },
+      { "name": "Josh", "money": 2.0, "items": ["flat-white", "bacon-egg-roll"] }
     ].to_json
   end
 
   let(:result_json) do
     [
-      { "name": "dave", change: 2.0 },
-      { "name": "jenny", change: 3.0 },
+      { "name": "dave", change: 2.0 , status: 'success' },
+      { "name": "jenny", change: 3.0 , status: 'success' },
+      { "name": "Josh", change: 2.0, status: 'fail', error: 'Insufficient Money.' },
     ].to_json
   end
 
@@ -36,7 +38,7 @@ describe 'Breakfast App' do
   end
 
   it 'should contain 2 records' do
-    expect(@result.count).to eq 2
+    expect(@result.count).to eq 3
   end
 
   it 'should provide the correct change' do
@@ -44,4 +46,9 @@ describe 'Breakfast App' do
     expect(@result[1]['change']).to eq 3.0
   end
 
+  it 'should return full money when order price is more than money' do
+    expect(@result[2]['change']).to eq 2.0
+    expect(@result[2]['status']).to eq 'fail'
+    expect(@result[2]['error']).to eq 'Insufficient Money.'
+  end
 end
